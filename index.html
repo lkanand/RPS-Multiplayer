@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="UTF-8">
+		<title>Rock Paper Scissors</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+		<script type="text/javascript" src="assets/javascript/rps.js"></script>
+	</head>
+	<body>
+		<div class = "row">
+			<h1>Rock Paper Scissors</h1>
+		</div>
+		<div class = "row form-wrapper">
+			<form>
+				<input type = "text" name = "player-name" id = "player-name" placeholder = "Enter your name" class = "input-box transparent-background">
+				<input type = "submit" value = "Submit" class = "submit-btn transparent-background" id = "submit-name">
+			</form>
+		</div>
+		<div class = "row" id = "main-game">
+			<div class = "col-xs-3 chalk-border" id="playerone-box">
+				<h2 id="playerone">Waiting...</h2>
+				<div class = "options opacity-zero" id = "options-one">
+					<p class = "option">Rock</p>
+					<p class = "option">Paper</p>
+					<p class = "option">Scissors</p>
+				</div>
+				<div class = "hidden">
+					<p class = "choice"><span id = "playerone-choice">Rock</span>!</p>
+				</div>
+				<p class = "statistics text-center opacity-zero">Wins: <span id = "playerone-wins"></span>&nbsp;&nbsp;&nbsp;&nbsp;Losses: <span id = "playerone-losses"></span></p>
+			</div>
+			<div class = "col-xs-3 chalk-border" id="result-box">
+				<h2 id="result" class = "opacity-zero"><span id="winner"></span> Wins!</h2>
+			</div>
+			<div class = "col-xs-3 chalk-border" id="playertwo-box">
+				<h2 id="playertwo">Waiting...</h2>
+				<div class = "options opacity-zero" id = "options-one">
+					<p class = "option">Rock</p>
+					<p class = "option">Paper</p>
+					<p class = "option">Scissors</p>
+				</div>
+				<div class = "hidden">
+					<p class = "choice"><span id = "playertwo-choice">Rock</span>!</p>
+				</div>
+				<p class = "statistics text-center opacity-zero">Wins: <span id = "playertwo-wins"></span>&nbsp;&nbsp;&nbsp;&nbsp;Losses: <span id = "playertwo-losses"></span></p>
+			</div>
+		</div>
+		<div class = "row chalk-border transparent-background" id = "chat">
+		</div>
+		<div class = "row form-wrapper">
+			<form>
+				<input type = "text" name = "message" id = "message" placeholder = "Send a message to your opponent" class = "input-box transparent-background">
+				<input type = "submit" value = "Submit" class = "submit-btn transparent-background" id = "submit-message">
+			</form>
+		</div>
+	</body>
