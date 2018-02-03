@@ -104,6 +104,14 @@ form{
 	width: 15%;
 }
 
+.purple{
+	color: #a910e5;
+}
+
+.blue{
+	color: #107ee5;
+}
+
 .submit-btn:hover{
 	background-color: white;
 	color: black;

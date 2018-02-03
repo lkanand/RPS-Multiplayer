@@ -28,6 +28,7 @@
   var playerOneExists = 0;
   var playerTwoExists = 0;
   var gameWinner = "";
+  var games = 1;
 
   $("#submit-name").on("click", function(event){
     event.preventDefault();
@@ -70,6 +71,7 @@
         isConnected.onDisconnect().remove();
       }
     }
+    $("#player-name").val("");
   }); 
 
 database.ref("/players").on("value", function(snapshot){
@@ -108,6 +110,9 @@ database.ref("/players").on("child_removed", function(snapshot){
       $("#playertwo").text("Waiting...");
       $("#playertwo-statistics").addClass("opacity-zero");
       $("#options-one").addClass("opacity-zero");
+      playertwo.losses = 0;
+      playertwo.wins = 0;
+      playertwo.name = "";
       playerone.choice = "";
       database.ref("players/playerone").update({
         "choice": null
@@ -120,6 +125,9 @@ database.ref("/players").on("child_removed", function(snapshot){
       $("#playerone").text("Waiting...");
       $("#playerone-statistics").addClass("opacity-zero");
       $("#options-one").addClass("opacity-zero");
+      playerone.losses = 0;
+      playerone.wins = 0;
+      playerone.name = "";
       playertwo.choice = "";
       database.ref("players/playertwo").update({
         "choice": null
@@ -127,8 +135,11 @@ database.ref("/players").on("child_removed", function(snapshot){
     }
     $(".option-one").unbind("click");
     $(".option-two").unbind("click");
-    $("#winner").empty();
-    $("#result").addClass("opacity-zero");
+    $("#chat").empty();
+    database.ref().child("messages").remove();
+    database.ref().child("gameWinner").remove();
+    database.ref().child("games").remove();
+    games = 1;
 });
 
 database.ref("/players").on("child_added", function(snapshot){
@@ -146,25 +157,29 @@ database.ref("players/playertwo").on("child_added", function(snapshot){
   if(playertwo.choice !== "") {
     evaluateResult();
   }
-})
+});
 
 database.ref("players/playertwo").on("child_removed", function(snapshot){
   playerone.choice = "";
   playertwo.choice = "";
   startRPSOne();
-})
+});
 
 database.ref("/gameWinner").on("value", function(snapshot){
   if(playerone.name !== "" && playertwo.name !== "") {
     gameWinner = snapshot.val();
-    $("#winner").text(gameWinner);
-    $("#result").removeClass("opacity-zero");
+  }
+});
+
+database.ref("/games").on("value", function(snapshot){
+  if(playerone.name !== "" && playertwo.name !== "") {
+    games = parseInt(snapshot.val());
+    $("#winner").text(gameWinner + " wins");
     setTimeout(function(){
       $("#winner").empty();
-      $("#result").addClass("opacity-zero");
-    }, 3000);
+    }, 2000);
   }
-})
+});
 
 function startRPSOne(){
   if(playerID === "playerone") {
@@ -196,7 +211,7 @@ function startRPSTwo(){
 }
 
 function evaluateResult(){
-  if(playerID == "playertwo") {
+  if(playerID === "playertwo") {
     if(playerone.choice === "Rock" && playertwo.choice === "Scissors") {
       playerone.wins++;
       playertwo.losses++;
@@ -232,14 +247,15 @@ function evaluateResult(){
       "playerone/wins": playerone.wins,
       "playerone/losses": playerone.losses,
       "playertwo/wins": playertwo.wins,
-      "playertwo/losses": playertwo.losses,
+      "playertwo/losses": playertwo.losses
     });
 
     if(playerone.choice === playertwo.choice)
       gameWinner = "Nobody";
 
     database.ref().update({
-      gameWinner: gameWinner
+      gameWinner: gameWinner,
+      games: games++
     });
 
     database.ref("/players").update({
@@ -248,3 +264,37 @@ function evaluateResult(){
     });
   }
 }
+
+$("#submit-message").on("click", function() {
+  event.preventDefault();
+  if(playerID === "")
+    alert("Must be an active player to send chat message");
+  else if(playerOneExists === 0 || playerTwoExists === 0)
+    alert("Must have an opponent to send chat message");
+  else {
+    var text = $("#message").val().trim();
+    database.ref("/messages").push({
+      text: text,
+      id: playerID,
+      time: firebase.database.ServerValue.TIMESTAMP
+    })
+  }
+  $("#message").val("");
+});
+
+database.ref("/messages").orderByChild("time").limitToLast(1).on("child_added", function(snapshot){
+  var p = $("<p>");
+  var player = snapshot.val().id;
+  var name;
+  if(player === "playerone") {
+    name = playerone.name;
+    p.addClass("purple");
+  }
+  else {
+    name = playertwo.name;
+    p.addClass("blue");
+  }
+  var span = $("<span>").text(name + ": " + snapshot.val().text);
+  p.append(span);
+  $("#chat").append(p);
+});
