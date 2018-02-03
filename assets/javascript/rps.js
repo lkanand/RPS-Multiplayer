@@ -98,59 +98,66 @@ database.ref("/players").on("value", function(snapshot){
     $("#playertwo-statistics").removeClass("opacity-zero");
     $("#playertwo").text(playertwo.name);
   }
+
+  if(playerTwoExists === 1 && playerOneExists === 0)
+    $("#winner").text("Waiting for Player One");
 }, function(errorObject){
   console.log("The read failed: " + errorObject.code);
 });
 
 database.ref("/players").on("child_removed", function(snapshot){
-    if(snapshot.key === "playertwo") {
-      playerTwoExists = 0;
-      $("#playertwo-losses").empty();
-      $("#playertwo-wins").empty();
-      $("#playertwo").text("Waiting...");
-      $("#playertwo-statistics").addClass("opacity-zero");
-      $("#options-one").addClass("opacity-zero");
-      playertwo.losses = 0;
-      playertwo.wins = 0;
-      playertwo.name = "";
-      playerone.choice = "";
-      database.ref("players/playerone").update({
-        "choice": null
-      });
-      $("#winner").text("Waiting for Player Two");
-    }
-    else {
-      playerOneExists = 0;
-      $("#playerone-losses").empty();
-      $("#playerone-wins").empty();
-      $("#playerone").text("Waiting...");
-      $("#playerone-statistics").addClass("opacity-zero");
-      $("#options-one").addClass("opacity-zero");
-      playerone.losses = 0;
-      playerone.wins = 0;
-      playerone.name = "";
-      playertwo.choice = "";
-      database.ref("players/playertwo").update({
-        "choice": null
-      });
-      $("#winner").text("Waiting for Player One");
-    }
-    $(".option-one").unbind("click");
-    $(".option-two").unbind("click");
-    $("#chat").empty();
-    database.ref().child("messages").remove();
-    database.ref().child("gameWinner").remove();
-    database.ref().child("games").remove();
-    games = 1;
+  if(snapshot.key === "playertwo") {
+    playerTwoExists = 0;
+    $("#playertwo-losses").empty();
+    $("#playertwo-wins").empty();
+    $("#playertwo").text("Waiting...");
+    $("#playertwo-statistics").addClass("opacity-zero");
+    $("#options-one").addClass("opacity-zero");
+    playertwo.losses = 0;
+    playertwo.wins = 0;
+    playertwo.name = "";
+    playerone.choice = "";
+    playertwo.choice = "";
+    database.ref("players/playerone").update({
+      "choice": null
+    });
+    $("#winner").text("Waiting for Player Two");
+  }
+  else if(snapshot.key === "playerone") {
+    playerOneExists = 0;
+    $("#playerone-losses").empty();
+    $("#playerone-wins").empty();
+    $("#playerone").text("Waiting...");
+    $("#playerone-statistics").addClass("opacity-zero");
+    $("#options-two").addClass("opacity-zero");
+    playerone.losses = 0;
+    playerone.wins = 0;
+    playerone.name = "";
+    playertwo.choice = "";
+    playerone.choice = "";
+    database.ref("players/playertwo").update({
+      "choice": null
+    });
+    $("#winner").text("Waiting for Player One");
+  }
+  $(".option-one").unbind("click");
+  $(".option-two").unbind("click");
+  $("#chat").empty();
+  database.ref().child("messages").remove();
+  database.ref().child("gameWinner").remove();
+  database.ref().child("games").remove();
+  games = 1;
 });
 
 database.ref("/players").on("child_added", function(snapshot){
+  if(snapshot.key === "playerone")
+    playerone.name = snapshot.val().name;
   if(snapshot.key === "playerone" && playerTwoExists === 0)
     $("#winner").text("Waiting for Player Two");
   if((snapshot.key === "playerone" && playerTwoExists === 1) || (snapshot.key === "playertwo" && playerOneExists === 1)) {
     if(playerID === "playerone")
       $("#winner").text("Choose an item");
-    if(playerID === "playertwo")
+    else if (playerID === "playertwo")
       $("#winner").text("Waiting for " + playerone.name + " to choose");
     startRPSOne(); 
   }
