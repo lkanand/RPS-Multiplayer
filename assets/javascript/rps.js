@@ -117,6 +117,7 @@ database.ref("/players").on("child_removed", function(snapshot){
       database.ref("players/playerone").update({
         "choice": null
       });
+      $("#winner").text("Waiting for Player Two");
     }
     else {
       playerOneExists = 0;
@@ -132,6 +133,7 @@ database.ref("/players").on("child_removed", function(snapshot){
       database.ref("players/playertwo").update({
         "choice": null
       });
+      $("#winner").text("Waiting for Player One");
     }
     $(".option-one").unbind("click");
     $(".option-two").unbind("click");
@@ -143,12 +145,23 @@ database.ref("/players").on("child_removed", function(snapshot){
 });
 
 database.ref("/players").on("child_added", function(snapshot){
-  if((snapshot.key === "playerone" && playerTwoExists === 1) || (snapshot.key === "playertwo" && playerOneExists === 1))
+  if(snapshot.key === "playerone" && playerTwoExists === 0)
+    $("#winner").text("Waiting for Player Two");
+  if((snapshot.key === "playerone" && playerTwoExists === 1) || (snapshot.key === "playertwo" && playerOneExists === 1)) {
+    if(playerID === "playerone")
+      $("#winner").text("Choose an item");
+    if(playerID === "playertwo")
+      $("#winner").text("Waiting for " + playerone.name + " to choose");
     startRPSOne(); 
+  }
 });
 
 database.ref("players/playerone").on("child_added", function(snapshot){
   if(playerone.choice !== "") {
+    if(playerID === "playerone")
+      $("#winner").text("Waiting for " + playertwo.name + " to choose");
+    if(playerID === "playertwo")
+      $("#winner").text("Choose an item");
     startRPSTwo();
   }
 });
@@ -176,7 +189,10 @@ database.ref("/games").on("value", function(snapshot){
     games = parseInt(snapshot.val());
     $("#winner").text(gameWinner + " wins");
     setTimeout(function(){
-      $("#winner").empty();
+      if(playerID === "playerone")
+        $("#winner").text("Choose an item");
+      if(playerID === "playertwo")
+        $("#winner").text("Waiting for " + playerone.name + " to choose");
     }, 2000);
   }
 });
