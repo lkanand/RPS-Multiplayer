@@ -313,4 +313,5 @@ database.ref("/messages").orderByChild("time").limitToLast(1).on("child_added", 
   var span = $("<span>").text(name + ": " + snapshot.val().text);
   p.append(span);
   $("#chat").append(p);
+  $("#chat").stop().animate({ scrollTop: $("#chat")[0].scrollHeight}, 1000);
 });
