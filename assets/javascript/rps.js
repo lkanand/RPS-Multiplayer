@@ -113,6 +113,7 @@ database.ref("/players").on("child_removed", function(snapshot){
     $("#playertwo").text("Waiting...");
     $("#playertwo-statistics").addClass("opacity-zero");
     $("#options-one").addClass("opacity-zero");
+    $("#options-one .option").removeClass("hover");
     playertwo.losses = 0;
     playertwo.wins = 0;
     playertwo.name = "";
@@ -130,6 +131,7 @@ database.ref("/players").on("child_removed", function(snapshot){
     $("#playerone").text("Waiting...");
     $("#playerone-statistics").addClass("opacity-zero");
     $("#options-two").addClass("opacity-zero");
+    $("#options-two .option").removeClass("hover");
     playerone.losses = 0;
     playerone.wins = 0;
     playerone.name = "";
@@ -207,6 +209,7 @@ database.ref("/games").on("value", function(snapshot){
 function startRPSOne(){
   if(playerID === "playerone") {
     $("#options-one").removeClass("opacity-zero");
+    $("#options-one .option").addClass("hover");
     $(".option-one").on("click", function(){
       $(".option-one").unbind("click");
       playerone.choice = $(this).text();
@@ -218,13 +221,17 @@ function startRPSOne(){
 }
 
 function startRPSTwo(){
-  if(playerID === "playerone")
+  if(playerID === "playerone") {
     $("#options-one").addClass("opacity-zero");
+    $("#options-one .option").removeClass("hover");
+  }
   else if(playerID === "playertwo") {
     $("#options-two").removeClass("opacity-zero");
+    $("#options-two .option").addClass("hover");
     $(".option-two").on("click", function(){
       $(".option-two").unbind("click");
       $("#options-two").addClass("opacity-zero");
+      $("#options-two .option").removeClass("hover");
       playertwo.choice = $(this).text();
       database.ref("players/playertwo").update({
         choice: playertwo.choice

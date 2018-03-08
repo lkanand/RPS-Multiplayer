@@ -42,12 +42,12 @@ form{
 	background: transparent;
 }
 
-.opacity-zero{
-	opacity: 0;
-}
-
 .hidden{
 	visibility: hidden;
+}
+
+.opacity-zero{
+	opacity: 0;
 }
 
 .options{
@@ -61,15 +61,17 @@ form{
 	padding-top: 1.6vh;
 }
 
-.option:hover{
+.hover{
+}
+
+.hover:hover{
 	cursor: pointer;
-	border: 20px solid rgba(255, 255, 255, .8);
-	border-image: url("../images/chalk-border.png") 30;
+	color: yellow;
 }
 
 .statistics{
 	font-size: 20px;
-	margin-bottom: -3vh;
+	margin-bottom: -1vh;
 }
 
 .choice{
