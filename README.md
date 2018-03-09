@@ -4,7 +4,7 @@ This project replicates the classic hand game rock-paper-scissors.
 
 ## How to Play
 
-To begin playing rock-paper-scissors, click <a href = "https://lkanand.github.io/RPS-Multiplayer/">here</a>. If the game does not already have two players, you can create your player by inputting a name into the form at the top and clicking the submit button. If you are the first player to submit this form, then you must wait for another user to create a player before you can begin playing. If there are already two people playing rock-paper-scissors, you will not be able to create your player until one of them exits the game (this program only supports two players at a time). You will know if a player has exited the game if one of the player boxes has the title "Waiting..." instead of a player name.  
+To begin playing rock-paper-scissors, click <a href = "https://lkanand.github.io/RPS-Multiplayer/">here</a>. If the game does not already have two players, you can create your player by inputting a name into the form at the top and clicking the submit button. If you are the first player to submit this form, then you must wait for another user to create a player before you can begin playing. If there are already two people playing rock-paper-scissors, you will not be able to create your player until one of them exits the game (this program only supports two players at a time). If one of the player boxes has the title "Waiting..." instead of a player name, then the game has an available spot.  
 
 ### The Game
 
