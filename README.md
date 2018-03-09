@@ -46,3 +46,50 @@ Firebase handlers serve the following purposes:
 * Prompt the program to start a new round
 * Update the chat screen whenever a user submits a message
 
+### Firebase Structure
+
+```
+.
+├── playerone 
+|	├── losses
+|	├── name
+|	├── wins
+|	└── choice
+|
+├── playertwo
+|	├── losses
+|	├── name
+|	├── wins
+|	└── choice
+|
+├── gameWinner
+|
+├── games
+|
+└── messages
+	├──message_id
+ 	|	├── author_id (playerone or playertwo)	
+ 	|	├── text (message content)
+	|	└── time (time branch was added)
+	├──message_id
+ 	|	├── author_id (playerone or playertwo)	
+ 	|	├── text (message content)
+	|	└── time (time branch was added)
+   	.
+   	.
+   	.
+	└──message_id
+ 		├── author_id (playerone or playertwo)	
+ 		├── text (message content)
+		└── time (time branch was added)
+```
+
+#### Notes on the Firebase Structure
+
+* playerone: added when player one is created
+    * choice: added when player one chooses rock, paper or scissors; removed at end of each round or when a player exits
+* playertwo: added when player two is created
+    * choice: added when player two chooses rock, paper or scissors; removed at end of each round or when a player exits
+* gameWinner: created at end of first round; removed when one of the players exits
+* games: number of games played by pair of users; created at end of first round; removed when one of the players exists
+* messages: program orders this branch by time created every time a new message is added; most recent message is then inserted into both players' chat screens; removed when player exits 
