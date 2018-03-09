@@ -71,7 +71,10 @@ form{
 
 .statistics{
 	font-size: 20px;
-	margin-bottom: -1vh;
+	position: absolute;
+	bottom: -10px;
+	left: 0px;
+	width: 100%;
 }
 
 .choice{

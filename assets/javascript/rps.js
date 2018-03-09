@@ -35,11 +35,13 @@
     var isConnected;
     if(enteredName === 0) {
       var name = $("#player-name").val().trim();
-      if(playerOneExists === 1 && playerTwoExists === 1) {
-        alert("Sorry, there are already two players.");
-      }
+      if(playerOneExists === 1 && playerTwoExists === 1)
+        alert("Sorry, there are already two players");
+      else if(name === "")
+        alert("Name cannot be empty");
       else if(playerOneExists === 0) {
         isConnected = database.ref("players/playerone");
+        $("#result").removeClass("hidden");
         $("#playerone").text(name);
         $("#playerone-statistics").removeClass("opacity-zero");
         $("#playerone-wins").text(playerone.wins);
@@ -55,6 +57,7 @@
         isConnected.onDisconnect().remove();
       }
       else {
+        $("#result").removeClass("hidden");
         isConnected = database.ref("players/playertwo");
         enteredName = 1;
         playerTwoExists = 1;
@@ -157,11 +160,14 @@ database.ref("/players").on("child_added", function(snapshot){
   if(snapshot.key === "playerone" && playerTwoExists === 0)
     $("#winner").text("Waiting for Player Two");
   if((snapshot.key === "playerone" && playerTwoExists === 1) || (snapshot.key === "playertwo" && playerOneExists === 1)) {
-    if(playerID === "playerone")
+    if(playerID === "playerone") {
       $("#winner").text("Choose an item");
-    else if (playerID === "playertwo")
+      startRPSOne();
+    }
+    else if (playerID === "playertwo") {
       $("#winner").text("Waiting for " + playerone.name + " to choose");
-    startRPSOne(); 
+      startRPSOne();
+    }
   }
 });
 
@@ -324,8 +330,12 @@ database.ref("/messages").orderByChild("time").limitToLast(1).on("child_added", 
     name = playertwo.name;
     p.addClass("blue");
   }
-  var span = $("<span>").text(name + ": " + snapshot.val().text);
-  p.append(span);
+
+  p.text(name + ": " + snapshot.val().text);
+
+  if(playerID === "")
+    p.appendClass("hidden");
+  
   $("#chat").append(p);
   $("#chat").stop().animate({ scrollTop: $("#chat")[0].scrollHeight}, 1000);
 });
